@@ -1,0 +1,6 @@
+__pycache__
+libri/data
+libri/dump
+libri/fbank
+libri/exp
+*.pickle

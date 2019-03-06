@@ -72,6 +72,7 @@ def convert_gt_from_array_to_list(gt_batch, gt_batch_mask=None):
 def get_audio(path_to_wav, filename):
     wav = wave.open(path_to_wav + filename, mode="r")
     (nchannels, sampwidth, framerate, nframes, comptype, compname) = wav.getparams()
+    assert framerate == 16000
     content = wav.readframes(nframes)
     samples = np.fromstring(content, dtype=np.int16)
     return (nchannels, sampwidth, framerate, nframes, comptype, compname), samples

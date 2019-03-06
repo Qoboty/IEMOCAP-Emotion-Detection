@@ -6,12 +6,6 @@ import wave
 import copy
 import math
 
-from keras.models import Sequential, Model
-from keras.layers.core import Dense, Activation
-from keras.layers import LSTM, Input, Flatten, Merge
-from keras.layers.wrappers import TimeDistributed
-from keras.optimizers import SGD, Adam, RMSprop
-from keras.layers.normalization import BatchNormalization
 from sklearn.preprocessing import label_binarize
 
 
@@ -19,17 +13,10 @@ from features import *
 from helper import *
 
 
-batch_size = 64
-nb_feat = 34
-nb_class = 4
-nb_epoch = 80
-
-optimizer = 'Adadelta'
-
-
 code_path = os.path.dirname(os.path.realpath(os.getcwd()))
 emotions_used = np.array(['ang', 'exc', 'neu', 'sad'])
-data_path = code_path + "/../data/sessions/"
+data_path = code_path + "/../data/"
+session_path = code_path + "/../data/sessions/"
 sessions = ['Session1', 'Session2', 'Session3', 'Session4', 'Session5']
 framerate = 16000
 
@@ -99,12 +86,12 @@ def read_iemocap_mocap():
     data = []
     ids = {}
     for session in sessions:
-        path_to_wav = data_path + session + '/dialog/wav/'
-        path_to_emotions = data_path + session + '/dialog/EmoEvaluation/'
-        path_to_transcriptions = data_path + session + '/dialog/transcriptions/'
-        path_to_mocap_hand = data_path + session + '/dialog/MOCAP_hand/'
-        path_to_mocap_rot = data_path + session + '/dialog/MOCAP_rotated/'
-        path_to_mocap_head = data_path + session + '/dialog/MOCAP_head/'
+        path_to_wav = session_path + session + '/dialog/wav/'
+        path_to_emotions = session_path + session + '/dialog/EmoEvaluation/'
+        path_to_transcriptions = session_path + session + '/dialog/transcriptions/'
+        path_to_mocap_hand = session_path + session + '/dialog/MOCAP_hand/'
+        path_to_mocap_rot = session_path + session + '/dialog/MOCAP_rotated/'
+        path_to_mocap_head = session_path + session + '/dialog/MOCAP_head/'
 
         files2 = os.listdir(path_to_wav)
 
