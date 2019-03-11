@@ -17,45 +17,45 @@ dst=$2
 mkdir -p $dst || exit 1;
 [ ! -d $src ] && echo "$0: no such directory $src" && exit 1;
 
-#wav_scp=$dst/wav.scp; [[ -f "$wav_scp" ]] && rm $wav_scp
-#trans=$dst/text; [[ -f "$trans" ]] && rm $trans
-#labels=$dst/label.scp; [[ -f "$labels" ]] && rm $labels
-#utt2spk=$dst/utt2spk; [[ -f "$utt2spk" ]] && rm $utt2spk
-#spk2gender=$dst/spk2gender; [[ -f $spk2gender ]] && rm $spk2gender
+wav_scp=$dst/wav.scp; [[ -f "$wav_scp" ]] && rm $wav_scp
+trans=$dst/text; [[ -f "$trans" ]] && rm $trans
+labels=$dst/label.scp; [[ -f "$labels" ]] && rm $labels
+utt2spk=$dst/utt2spk; [[ -f "$utt2spk" ]] && rm $utt2spk
+spk2gender=$dst/spk2gender; [[ -f $spk2gender ]] && rm $spk2gender
 
 echo "current work dir : $PWD"
 
-#for reader_dir in $(find -L $src -mindepth 1 -maxdepth 1 -type d | sort); do
-#    reader=$(basename $reader_dir)
-#    reader_gender=${reader:5:1}
-#    if [ "$reader_gender" != 'F' ] && [ "$reader_gender" != 'M' ]; then
-#        echo "$0: unexpected gender: '$reader_gender'"
-#        exit 1;
-#    fi
-#
-#    # wav 
-#    find -L $reader_dir/ -iname "*.wav" | sort | xargs -I% basename % .wav | \
-#        awk -v "dir=$reader_dir" '{printf "%s %s/%s.wav\n", $0, dir, $0}' >> $wav_scp || exit 1
-#
-#    # text
-#    for txtfile in $(find -L $reader_dir/ -iname "*.txt" | sort); do
-#        key=$(basename $txtfile .txt)
-#        text=$(cat < $txtfile | tr [:lower:] [:upper:]) 
-#        echo "$key $text" >> $trans
-#    done
-#
-#    # label
-#    for labelfile in $(find -L $reader_dir/ -iname "*.label" | sort); do
-#        key=$(basename $labelfile .label)
-#        emotion=$(cat $labelfile)
-#        echo "$key $emotion" >> $labels
-#    done
-#
-#done
-#
-wav_scp=$dst/wav.scp; 
-trans=$dst/text; 
-labels=$dst/label.scp; 
+for reader_dir in $(find -L $src -mindepth 1 -maxdepth 1 -type d | sort); do
+    reader=$(basename $reader_dir)
+    reader_gender=${reader:5:1}
+    if [ "$reader_gender" != 'F' ] && [ "$reader_gender" != 'M' ]; then
+        echo "$0: unexpected gender: '$reader_gender'"
+        exit 1;
+    fi
+
+    # wav 
+    find -L $reader_dir/ -iname "*.wav" | sort | xargs -I% basename % .wav | \
+        awk -v "dir=$reader_dir" '{printf "%s %s/%s.wav\n", $0, dir, $0}' >> $wav_scp || exit 1
+
+    # text
+    for txtfile in $(find -L $reader_dir/ -iname "*.txt" | sort); do
+        key=$(basename $txtfile .txt)
+        text=$(cat < $txtfile | tr [:lower:] [:upper:]) 
+        echo "$key $text" >> $trans
+    done
+
+    # label
+    for labelfile in $(find -L $reader_dir/ -iname "*.label" | sort); do
+        key=$(basename $labelfile .label)
+        emotion=$(cat $labelfile)
+        echo "$key $emotion" >> $labels
+    done
+
+done
+
+#wav_scp=$dst/wav.scp; 
+#trans=$dst/text; 
+#labels=$dst/label.scp; 
 
 # copy vocab from libri
 vocabdir=/nfs/cold_project/dataset/opensource/librispeech/prepare_data/data/lang_char/

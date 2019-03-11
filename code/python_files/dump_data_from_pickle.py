@@ -23,10 +23,12 @@ def save_wav(data, filename, rate=framerate):
     scipy.io.wavfile.write(filename, rate, data)
 
 def save_text(data, filename):
+    print('txt', filename, 'data', data)
     with open(filename, 'w') as f:
         f.write(data)
 
 def save_label(data, filename):
+    print('label', filename, 'data', data)
     with open(filename, 'w') as f:
         f.write(data)
 

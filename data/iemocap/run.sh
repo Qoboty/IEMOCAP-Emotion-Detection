@@ -1,7 +1,7 @@
 #!/bin/bash
 
-stage=1
-stop_stage=1
+stage=0
+stop_stage=10
 ngpu=0
 debugmode=1
 dumpdir=dump
@@ -41,16 +41,16 @@ feat_tr_dir=${dumpdir}/${train_set}/delta${do_delta}; mkdir -p ${feat_tr_dir}
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     echo "stage 1: Feature Generation"
     fbankdir=fbank
-    #for x in test; do
-    #    ./make_fbank_pitch.sh --cmd "$train_cmd" --nj 32 --write-utt2num-frames true \
-    #          data/${x} exp/make_fbank/${x} ${fbankdir}
-    #done
+    for x in test; do
+        ./make_fbank_pitch.sh --cmd "$train_cmd" --nj 32 --write-utt2num-frames true \
+              data/${x} exp/make_fbank/${x} ${fbankdir}
+    done
 
-    #utils/combine_data.sh --extra_files utt2num_frames --skip-fix true data/${train_set}_org data/test
+    utils/combine_data.sh --extra_files utt2num_frames --skip-fix true data/${train_set}_org data/test
 
     # remove utt having more than 3000 frames
     # remove utt having more than 400 characters
-    #./remove_longshortdata.sh --maxframes 3000 --maxchars 400 data/${train_set}_org data/${train_set} || exit 1
+    ./remove_longshortdata.sh --maxframes 3000 --maxchars 400 data/${train_set}_org data/${train_set} || exit 1
 
     # cmopute global CMVN, cp from libri
     #compute-cmvn-stats scp:data/${train_set}/feats.scp data/${train_set}/cmvn.ark
