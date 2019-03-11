@@ -1,7 +1,7 @@
 #!/bin/bash
 
 stage=0
-stop_stage=10
+stop_stage=2
 ngpu=0
 debugmode=1
 dumpdir=dump
@@ -40,11 +40,11 @@ train_set=iemocap_test
 feat_tr_dir=${dumpdir}/${train_set}/delta${do_delta}; mkdir -p ${feat_tr_dir}
 if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     echo "stage 1: Feature Generation"
-    fbankdir=fbank
-    for x in test; do
-        ./make_fbank_pitch.sh --cmd "$train_cmd" --nj 32 --write-utt2num-frames true \
-              data/${x} exp/make_fbank/${x} ${fbankdir}
-    done
+    #fbankdir=fbank
+    #for x in test; do
+    #    ./make_fbank_pitch.sh --cmd "$train_cmd" --nj 32 --write-utt2num-frames true \
+    #          data/${x} exp/make_fbank/${x} ${fbankdir}
+    #done
 
     utils/combine_data.sh --extra_files utt2num_frames --skip-fix true data/${train_set}_org data/test
 
@@ -65,6 +65,7 @@ fi
 
 if [ ${stage} -le 2 ] && [  ${stop_stage} -ge 2 ]; then
   echo "Stage 2: (charactor) label"
+  dict=data/vocab/train_960_char_units.txt
   # make json labels
   ./data2json.sh --feat ${feat_tr_dir}/feats.scp  --space ${space} \
         data/${train_set} ${dict} data/${train_set}/lang_char
