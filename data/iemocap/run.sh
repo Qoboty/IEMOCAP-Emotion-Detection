@@ -1,6 +1,6 @@
 #!/bin/bash
 
-stage=0
+stage=2
 stop_stage=2
 ngpu=0
 debugmode=1
