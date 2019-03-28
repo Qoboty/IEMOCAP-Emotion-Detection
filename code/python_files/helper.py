@@ -5,6 +5,7 @@ import sys
 import numpy as np
 import pandas as pd
 import glob
+from keras.preprocessing.text import text_to_word_sequence
 
 
 def split_wav(wav, emotions):
@@ -91,6 +92,45 @@ def get_transcriptions(path_to_transcriptions, filename):
         transcription[ind_id] = ind_ts
     return transcription
 
+def get_transcriptions_align(path_to_transcriptions, filename,
+                             path_to_transcriptions_to_align):
+    f = open(path_to_transcriptions + filename, 'r').read()
+    f = np.array(f.split('\n'))
+    transcription = {}
+    print("path_to_transcriptions:", path_to_transcriptions)
+    print("path_to_transcriptions_to_align:", path_to_transcriptions_to_align)
+    print("filename:", filename)
+    for i in range(len(f) - 1):
+        g = f[i]
+        i1 = g.find(': ')
+        i0 = g.find(' [')
+        ind_id = g[:i0]
+        ind_ts = g[i1+2:]
+        ind_ts = text_to_word_sequence(ind_ts,filters='!"#$%&()*+,-./:;<=>?@[\\]^`{|}~\t\n',
+                                       lower=True,split=" ")
+        align_t = []
+        print("ind_id_text:", g, flush=True)
+        print("ind_id:", ind_id, flush=True)
+        align_file_name = path_to_transcriptions_to_align + filename[:-4] + "/" + str(ind_id) + ".wdseg"
+        if os.path.exists(align_file_name):
+            f_align = open(align_file_name, 'r').read()
+            f_align = np.array(f_align.split('\n'))
+            print("f_align", f_align, flush=True)
+            for i in range(2, len(f_align) - 3):
+                # print(f'f_align{i}', f_align[i])
+                w = f_align[i].split()[3].split("(")[0]
+                w = text_to_word_sequence(w,filters='!"#$%&()*+,-./:;=>?@[\\]^`{|}~\t\n',
+                                           lower=True,split=" ")[0]
+                if w in ind_ts:
+                    align_t.append({'word': w,
+                                    'SFrm': f_align[i].split()[0],
+                                    'Efrm': f_align[i].split()[1]})
+            print("align_t", align_t, flush=True)
+            print("w_list", ind_ts, flush=True)
+            assert len(align_t) == len(ind_ts)
+            transcription[ind_id] = {'ind_ts': ind_ts,
+                                   'align_t': align_t}
+    return transcription
 
 def get_emotions(path_to_emotions, filename):
     f = open(path_to_emotions + filename, 'r').read()
