@@ -10,6 +10,8 @@ from features import *
 from helper import *
 import kaldiio
 
+''' dump wav, text, label from pkl '''
+
 code_path = os.path.dirname(os.path.realpath(os.getcwd()))
 emotions_used = np.array(['ang', 'exc', 'neu', 'sad'])
 data_path = code_path + "/../data/"

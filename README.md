@@ -3,11 +3,7 @@
 https://arxiv.org/abs/1804.05788 
 Please cite this if you use the code
 
-
-
 Multi-modal Emotion detection from IEMOCAP on Speech, Text, Motion-Capture Data using Neural Nets.
-
-
 
 We attempt to exploit this effectiveness of Neural networks to enable us to perform multimodal Emotion recognition on IEMOCAP dataset using data from Speech, Text, and Motion capture data from face expressions, rotation and hand move- ments. Prior research has concentrated on Emotion detection from Speech on the IEMOCAP dataset, but our approach is the first that uses the multiple modes of data offered by IEMOCAP for a more robust and accurate emotion detection.
 
@@ -19,6 +15,6 @@ Please refer to the pdf and ppt for more details.
 # prepare data
 
 1. link `iemocap dir` to `data/sessions`
-1. run `python -u code/python_files/mocap_data_collect.py` 
+1. run `python -u code/python_files/mocap_data_collect.py`  to collect data
 1. `code/pyton/dump_data_from_pickle.py` to save `wav`, `text`, `label` to  `dir`
 

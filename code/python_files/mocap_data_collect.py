@@ -12,6 +12,7 @@ from sklearn.preprocessing import label_binarize
 from features import *
 from helper import *
 
+''' collection data from corpus '''
 
 code_path = os.path.dirname(os.path.realpath(os.getcwd()))
 emotions_used = np.array(['ang', 'exc', 'neu', 'sad'])
